@@ -105,6 +105,9 @@
   text-align: center;
   border-radius: 8rpx;
   font-size: 30rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn-primary {

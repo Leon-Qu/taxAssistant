@@ -149,8 +149,8 @@ function calculateOptimalBonusPlan(personalInfo, months = 12) {
  * @returns {object} 最优分配方案
  */
 function calculateOptimalFamilyDeduction(spouse1, spouse2, sharedDeductions) {
-  const { housingLoan, childcare } = sharedDeductions;
-  const totalSharedDeduction = housingLoan + childcare;
+  const { housingLoan, childcare, childrenEducation, housingRent } = sharedDeductions;
+  const totalSharedDeduction = housingLoan + childcare + childrenEducation + housingRent;
   
   // 如果没有共享扣除项，直接返回原方案
   if (totalSharedDeduction === 0) {
@@ -242,12 +242,41 @@ function calculateOptimalFamilyDeduction(spouse1, spouse2, sharedDeductions) {
   };
 }
 
+/**
+ * 计算年度累计应纳税额
+ * @param {number} monthlyIncome - 月度工资收入
+ * @param {number} socialInsurance - 月度社保公积金
+ * @param {number} specialDeduction - 月度专项附加扣除总额
+ * @param {number} otherDeduction - 月度其他扣除总额
+ * @param {number} months - 已工作月数
+ * @returns {object} 年度累计税额和适用税率信息
+ */
+function calculateAnnualTax(monthlyIncome, socialInsurance, specialDeduction, otherDeduction, months = 12) {
+  // 计算年度累计收入和扣除
+  const annualIncome = monthlyIncome * months;
+  const annualSocialInsurance = socialInsurance * months;
+  const annualSpecialDeduction = specialDeduction * months;
+  const annualOtherDeduction = otherDeduction * months;
+  
+  // 计算年度累计应纳税所得额
+  const annualTaxableIncome = calculateTaxableIncome(
+    annualIncome,
+    annualSocialInsurance,
+    annualSpecialDeduction,
+    annualOtherDeduction
+  );
+  
+  // 计算年度累计应纳税额
+  return calculateTax(annualTaxableIncome);
+}
+
 module.exports = {
   calculateTaxableIncome,
   calculateTax,
   calculateBonusTax,
   calculateOptimalBonusPlan,
   calculateOptimalFamilyDeduction,
+  calculateAnnualTax,
   TAX_THRESHOLD,
   TAX_RATE_TABLE
 };
