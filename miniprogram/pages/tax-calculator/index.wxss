@@ -57,6 +57,18 @@
   box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
 }
 
+/* 家庭信息并排布局容器 */
+.family-info-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+/* 家庭成员信息区块样式 */
+.family-member-section {
+  width: 48%;
+}
+
 .section-title {
   font-size: 32rpx;
   font-weight: bold;
@@ -81,6 +93,18 @@
   width: 220rpx;
   font-size: 28rpx;
   color: #666;
+}
+
+.label-with-icon {
+  display: flex;
+  align-items: center;
+  width: 220rpx;
+}
+
+.info-icon {
+  width: 32rpx;
+  height: 32rpx;
+  margin-left: 10rpx;
 }
 
 .input {

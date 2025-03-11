@@ -248,10 +248,11 @@ function calculateOptimalFamilyDeduction(spouse1, spouse2, sharedDeductions) {
  * @param {number} socialInsurance - 月度社保公积金
  * @param {number} specialDeduction - 月度专项附加扣除总额
  * @param {number} otherDeduction - 月度其他扣除总额
- * @param {number} months - 已工作月数
+ * @param {number} months - 计算月数
+ * @param {number} otherIncome - 其他收入（年度）
  * @returns {object} 年度累计税额和适用税率信息
  */
-function calculateAnnualTax(monthlyIncome, socialInsurance, specialDeduction, otherDeduction, months = 12) {
+function calculateAnnualTax(monthlyIncome, socialInsurance, specialDeduction, otherDeduction, months = 12, otherIncome = 0) {
   // 计算年度累计收入和扣除
   const annualIncome = monthlyIncome * months;
   const annualSocialInsurance = socialInsurance * months;
@@ -260,7 +261,7 @@ function calculateAnnualTax(monthlyIncome, socialInsurance, specialDeduction, ot
   
   // 计算年度累计应纳税所得额
   const annualTaxableIncome = calculateTaxableIncome(
-    annualIncome,
+    annualIncome + otherIncome,
     annualSocialInsurance,
     annualSpecialDeduction,
     annualOtherDeduction

@@ -11,6 +11,7 @@ Page({
       socialInsurance: 0, // 社保公积金
       otherDeductions: 0, // 其他扣除
       annualBonus: 0, // 年终奖
+      otherIncome: 0, // 其他收入（年度）
       // 专项附加扣除
       specialDeductions: {
         childrenEducation: 0, // 子女教育
@@ -28,6 +29,7 @@ Page({
         socialInsurance: 0,
         otherDeductions: 0,
         annualBonus: 0,
+        otherIncome: 0, // 其他收入（年度）
         specialDeductions: {
           continuingEducation: 0,
           elderlySupport: 0
@@ -38,6 +40,7 @@ Page({
         socialInsurance: 0,
         otherDeductions: 0,
         annualBonus: 0,
+        otherIncome: 0, // 其他收入（年度）
         specialDeductions: {
           continuingEducation: 0,
           elderlySupport: 0
@@ -151,7 +154,7 @@ Page({
    * 计算个人所得税
    */
   calculatePersonalTax: function() {
-    const { monthlyIncome, socialInsurance, otherDeductions, annualBonus, specialDeductions } = this.data.personalInfo;
+    const { monthlyIncome, socialInsurance, otherDeductions, annualBonus, otherIncome, specialDeductions } = this.data.personalInfo;
     
     // 计算专项附加扣除总额
     const totalSpecialDeduction = Object.values(specialDeductions).reduce((sum, value) => sum + value, 0);
@@ -173,7 +176,8 @@ Page({
       socialInsurance,
       totalSpecialDeduction,
       otherDeductions,
-      12
+      12,
+      otherIncome
     );
     
     // 更新结果
@@ -251,14 +255,16 @@ Page({
       monthlyIncome: self.monthlyIncome,
       socialInsurance: self.socialInsurance,
       specialDeduction: totalSpecialDeductionSelf,
-      otherDeduction: self.otherDeductions
+      otherDeduction: self.otherDeductions,
+      otherIncome: self.otherIncome
     };
     
     const spouseInfo = {
       monthlyIncome: spouse.monthlyIncome,
       socialInsurance: spouse.socialInsurance,
       specialDeduction: totalSpecialDeductionSpouse,
-      otherDeduction: spouse.otherDeductions
+      otherDeduction: spouse.otherDeductions,
+      otherIncome: spouse.otherIncome
     };
     
     // 计算最优分配方案
@@ -411,6 +417,7 @@ Page({
           socialInsurance: 0,
           otherDeductions: 0,
           annualBonus: 0,
+          otherIncome: 0,
           specialDeductions: {
             childrenEducation: 0,
             continuingEducation: 0,
@@ -431,6 +438,7 @@ Page({
             socialInsurance: 0,
             otherDeductions: 0,
             annualBonus: 0,
+            otherIncome: 0,
             specialDeductions: {
               continuingEducation: 0,
               elderlySupport: 0
@@ -441,6 +449,7 @@ Page({
             socialInsurance: 0,
             otherDeductions: 0,
             annualBonus: 0,
+            otherIncome: 0,
             specialDeductions: {
               continuingEducation: 0,
               elderlySupport: 0
@@ -493,6 +502,18 @@ Page({
       title: '已保存',
       icon: 'success',
       duration: 2000
+    });
+  },
+
+  /**
+   * 显示其他扣除项说明
+   */
+  showOtherDeductionsInfo: function() {
+    wx.showModal({
+      title: '其他扣除项说明',
+      content: '其他扣除项包括：\n\n1. 捐赠支出：个人通过公益性社会组织或县级以上人民政府及其部门等国家机关，向教育、扶贫、救灾等公益慈善事业的捐赠支出，可以按照税法规定在计算应纳税所得额时扣除。\n\n2. 生育津贴：符合国家计划生育政策生育的，可以享受生育津贴，该部分收入可以在计算个人所得税时扣除。\n\n3. 商业健康保险：购买符合规定的商业健康保险产品的支出，可以按照规定在计算应纳税所得额时扣除。\n\n4. 税收递延型养老保险：个人购买符合规定的商业养老保险产品的支出，可以按照规定在一定标准内税前扣除。',
+      showCancel: false,
+      confirmText: '我知道了'
     });
   }
 });

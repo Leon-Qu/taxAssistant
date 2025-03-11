@@ -129,61 +129,70 @@
   <!-- 家庭模式表单 -->
   <block wx:if="{{mode === 'family'}}">
     <view class="form-container">
-      <!-- 本人信息 -->
-      <view class="form-section">
-        <view class="section-title">本人信息</view>
-        <view class="form-item">
-          <text class="label">月度税前工资</text>
-          <input class="input" type="digit" value="{{familyInfo.self.monthlyIncome}}" bindinput="onInputChange" data-spouse="1" data-field="monthlyIncome" placeholder="请输入月度税前工资"/>
+      <!-- 本人和配偶信息并排布局 -->
+      <view class="family-info-container">
+        <!-- 本人信息 -->
+        <view class="form-section family-member-section">
+          <view class="section-title">本人信息</view>
+          <view class="form-item">
+            <text class="label">月度税前工资</text>
+            <input class="input" type="digit" value="{{familyInfo.self.monthlyIncome}}" bindinput="onInputChange" data-spouse="1" data-field="monthlyIncome" placeholder="请输入月度税前工资"/>
+          </view>
+          <view class="form-item">
+            <text class="label">社保公积金</text>
+            <input class="input" type="digit" value="{{familyInfo.self.socialInsurance}}" bindinput="onInputChange" data-spouse="1" data-field="socialInsurance" placeholder="请输入社保公积金金额"/>
+          </view>
+          <view class="form-item">
+            <text class="label">年终奖</text>
+            <input class="input" type="digit" value="{{familyInfo.self.annualBonus}}" bindinput="onInputChange" data-spouse="1" data-field="annualBonus" placeholder="请输入年终奖金额（如有）"/>
+          </view>
+          <view class="form-item">
+            <view class="label-with-icon">
+              <text class="label">其他扣除金额</text>
+              <image src="/miniprogram/images/icons/info.svg" class="info-icon" bindtap="showOtherDeductionsInfo"></image>
+            </view>
+            <input class="input" type="digit" value="{{familyInfo.self.otherDeductions}}" bindinput="onInputChange" data-spouse="1" data-field="otherDeductions" placeholder="请输入其他扣除金额"/>
+          </view>
+          <view class="form-item">
+            <text class="label">继续教育</text>
+            <input class="input" type="digit" value="{{familyInfo.self.specialDeductions.continuingEducation}}" bindinput="onInputChange" data-spouse="1" data-field="specialDeductions" data-subfield="continuingEducation" placeholder="请输入继续教育扣除金额"/>
+          </view>
+          <view class="form-item">
+            <text class="label">赡养老人</text>
+            <input class="input" type="digit" value="{{familyInfo.self.specialDeductions.elderlySupport}}" bindinput="onInputChange" data-spouse="1" data-field="specialDeductions" data-subfield="elderlySupport" placeholder="请输入赡养老人扣除金额"/>
+          </view>
         </view>
-        <view class="form-item">
-          <text class="label">社保公积金</text>
-          <input class="input" type="digit" value="{{familyInfo.self.socialInsurance}}" bindinput="onInputChange" data-spouse="1" data-field="socialInsurance" placeholder="请输入社保公积金金额"/>
-        </view>
-        <view class="form-item">
-          <text class="label">年终奖</text>
-          <input class="input" type="digit" value="{{familyInfo.self.annualBonus}}" bindinput="onInputChange" data-spouse="1" data-field="annualBonus" placeholder="请输入年终奖金额（如有）"/>
-        </view>
-        <view class="form-item">
-          <text class="label">其他扣除金额</text>
-          <input class="input" type="digit" value="{{familyInfo.self.otherDeductions}}" bindinput="onInputChange" data-spouse="1" data-field="otherDeductions" placeholder="请输入其他扣除金额"/>
-        </view>
-        <view class="form-item">
-          <text class="label">继续教育</text>
-          <input class="input" type="digit" value="{{familyInfo.self.specialDeductions.continuingEducation}}" bindinput="onInputChange" data-spouse="1" data-field="specialDeductions" data-subfield="continuingEducation" placeholder="请输入继续教育扣除金额"/>
-        </view>
-        <view class="form-item">
-          <text class="label">赡养老人</text>
-          <input class="input" type="digit" value="{{familyInfo.self.specialDeductions.elderlySupport}}" bindinput="onInputChange" data-spouse="1" data-field="specialDeductions" data-subfield="elderlySupport" placeholder="请输入赡养老人扣除金额"/>
-        </view>
-      </view>
 
-      <!-- 配偶信息 -->
-      <view class="form-section">
-        <view class="section-title">配偶信息</view>
-        <view class="form-item">
-          <text class="label">月度税前工资</text>
-          <input class="input" type="digit" value="{{familyInfo.spouse.monthlyIncome}}" bindinput="onInputChange" data-spouse="2" data-field="monthlyIncome" placeholder="请输入月度税前工资"/>
-        </view>
-        <view class="form-item">
-          <text class="label">社保公积金</text>
-          <input class="input" type="digit" value="{{familyInfo.spouse.socialInsurance}}" bindinput="onInputChange" data-spouse="2" data-field="socialInsurance" placeholder="请输入社保公积金金额"/>
-        </view>
-        <view class="form-item">
-          <text class="label">年终奖</text>
-          <input class="input" type="digit" value="{{familyInfo.spouse.annualBonus}}" bindinput="onInputChange" data-spouse="2" data-field="annualBonus" placeholder="请输入年终奖金额（如有）"/>
-        </view>
-        <view class="form-item">
-          <text class="label">其他扣除金额</text>
-          <input class="input" type="digit" value="{{familyInfo.spouse.otherDeductions}}" bindinput="onInputChange" data-spouse="2" data-field="otherDeductions" placeholder="请输入其他扣除金额"/>
-        </view>
-        <view class="form-item">
-          <text class="label">继续教育</text>
-          <input class="input" type="digit" value="{{familyInfo.spouse.specialDeductions.continuingEducation}}" bindinput="onInputChange" data-spouse="2" data-field="specialDeductions" data-subfield="continuingEducation" placeholder="请输入继续教育扣除金额"/>
-        </view>
-        <view class="form-item">
-          <text class="label">赡养老人</text>
-          <input class="input" type="digit" value="{{familyInfo.spouse.specialDeductions.elderlySupport}}" bindinput="onInputChange" data-spouse="2" data-field="specialDeductions" data-subfield="elderlySupport" placeholder="请输入赡养老人扣除金额"/>
+        <!-- 配偶信息 -->
+        <view class="form-section family-member-section">
+          <view class="section-title">配偶信息</view>
+          <view class="form-item">
+            <text class="label">月度税前工资</text>
+            <input class="input" type="digit" value="{{familyInfo.spouse.monthlyIncome}}" bindinput="onInputChange" data-spouse="2" data-field="monthlyIncome" placeholder="请输入月度税前工资"/>
+          </view>
+          <view class="form-item">
+            <text class="label">社保公积金</text>
+            <input class="input" type="digit" value="{{familyInfo.spouse.socialInsurance}}" bindinput="onInputChange" data-spouse="2" data-field="socialInsurance" placeholder="请输入社保公积金金额"/>
+          </view>
+          <view class="form-item">
+            <text class="label">年终奖</text>
+            <input class="input" type="digit" value="{{familyInfo.spouse.annualBonus}}" bindinput="onInputChange" data-spouse="2" data-field="annualBonus" placeholder="请输入年终奖金额（如有）"/>
+          </view>
+          <view class="form-item">
+            <view class="label-with-icon">
+              <text class="label">其他扣除金额</text>
+              <image src="/miniprogram/images/icons/info.svg" class="info-icon" bindtap="showOtherDeductionsInfo"></image>
+            </view>
+            <input class="input" type="digit" value="{{familyInfo.spouse.otherDeductions}}" bindinput="onInputChange" data-spouse="2" data-field="otherDeductions" placeholder="请输入其他扣除金额"/>
+          </view>
+          <view class="form-item">
+            <text class="label">继续教育</text>
+            <input class="input" type="digit" value="{{familyInfo.spouse.specialDeductions.continuingEducation}}" bindinput="onInputChange" data-spouse="2" data-field="specialDeductions" data-subfield="continuingEducation" placeholder="请输入继续教育扣除金额"/>
+          </view>
+          <view class="form-item">
+            <text class="label">赡养老人</text>
+            <input class="input" type="digit" value="{{familyInfo.spouse.specialDeductions.elderlySupport}}" bindinput="onInputChange" data-spouse="2" data-field="specialDeductions" data-subfield="elderlySupport" placeholder="请输入赡养老人扣除金额"/>
+          </view>
         </view>
       </view>
 
