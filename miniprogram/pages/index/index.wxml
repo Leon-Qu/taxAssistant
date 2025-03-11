@@ -7,8 +7,6 @@
     </view>
     <view class="ability_container">
       <view class="ability_title">主要功能</view>
-      <view class="ability_item">无需搭建服务器，快速构建小程序</view>
-      <view class="ability_item">免登录、免鉴权调用微信开放服务</view>
       <view class="ability_item">个人模式：精确计算个人所得税</view>
       <view class="ability_item">家庭模式：优化夫妻税收方案</view>
       <view class="ability_item">年终奖计算：单独计税与合并计税对比</view>

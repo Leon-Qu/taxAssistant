@@ -80,9 +80,31 @@
 
 .form-item {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  padding: 20rpx 0;
+  padding: 16rpx 0;
   border-bottom: 1rpx solid #eee;
+}
+
+.label {
+  width: 200rpx;
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 0;
+}
+
+.input {
+  flex: 1;
+  height: 60rpx;
+  font-size: 28rpx;
+  color: #333;
+  padding: 0 20rpx;
+}
+
+.info-icon {
+  width: 36rpx;
+  height: 36rpx;
+  margin-left: 10rpx;
 }
 
 .form-item:last-child {
