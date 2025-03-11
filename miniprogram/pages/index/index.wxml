@@ -1,0 +1,26 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="main">
+    <view class="title font_title_1">个人所得税计算助手</view>
+    <view class="sub_title">
+      欢迎使用个人所得税计算助手！本应用将帮助您快速计算个人所得税，支持个人模式和家庭模式。
+    </view>
+    <view class="ability_container">
+      <view class="ability_title">主要功能</view>
+      <view class="ability_item">无需搭建服务器，快速构建小程序</view>
+      <view class="ability_item">免登录、免鉴权调用微信开放服务</view>
+      <view class="ability_item">个人模式：精确计算个人所得税</view>
+      <view class="ability_item">家庭模式：优化夫妻税收方案</view>
+      <view class="ability_item">年终奖计算：单独计税与合并计税对比</view>
+    </view>
+    <view class="title font_title_2">开始使用</view>
+    <view class="sub_title">
+      点击下方按钮，立即开始计算您的个人所得税，获取最优的纳税方案。
+    </view>
+    <view class="button" bind:tap="gotoTaxCalculatorPage">开始计算个人所得税</view>
+    <view class="seperator" />
+    <view class="bottom-tip">
+      本应用根据最新的个人所得税政策进行计算，支持专项附加扣除、年终奖计算等功能，帮助您合理规划个税申报方案。
+    </view>
+  </view>
+</view>
