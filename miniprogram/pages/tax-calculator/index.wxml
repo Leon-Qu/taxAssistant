@@ -6,134 +6,221 @@
       <view class="mode-item {{mode === 'personal' ? 'active' : ''}}" bindtap="switchMode" data-mode="personal">个人模式</view>
       <view class="mode-item {{mode === 'family' ? 'active' : ''}}" bindtap="switchMode" data-mode="family">家庭模式</view>
     </view>
+
+
   </view>
+
+
 
   <!-- 个人模式表单 -->
   <block wx:if="{{mode === 'personal'}}">
     <view class="form-container">
       <view class="form-section">
         <view class="section-title">基本信息</view>
+
+
         <view class="form-item">
           <text class="label">月度税前工资</text>
           <input class="input" type="digit" value="{{personalInfo.monthlyIncome}}" bindinput="onInputChange" data-field="monthlyIncome" placeholder="请输入月度税前工资"/>
         </view>
+
+
         <view class="form-item">
           <text class="label">社保公积金</text>
           <input class="input" type="digit" value="{{personalInfo.socialInsurance}}" bindinput="onInputChange" data-field="socialInsurance" placeholder="请输入社保公积金金额"/>
         </view>
+
+
         <view class="form-item">
           <text class="label">年终奖</text>
           <input class="input" type="digit" value="{{personalInfo.annualBonus}}" bindinput="onInputChange" data-field="annualBonus" placeholder="请输入年终奖金额（如有）"/>
         </view>
+
+
       </view>
+
+
 
       <view class="form-section">
         <view class="section-title">专项附加扣除</view>
+
+
         <view class="form-item">
           <text class="label">子女教育</text>
           <input class="input" type="digit" value="{{personalInfo.specialDeductions.childrenEducation}}" bindinput="onInputChange" data-field="specialDeductions" data-subfield="childrenEducation" placeholder="请输入子女教育扣除金额"/>
         </view>
+
+
         <view class="form-item">
           <text class="label">继续教育</text>
           <input class="input" type="digit" value="{{personalInfo.specialDeductions.continuingEducation}}" bindinput="onInputChange" data-field="specialDeductions" data-subfield="continuingEducation" placeholder="请输入继续教育扣除金额"/>
         </view>
+
+
         <view class="form-item">
           <text class="label">住房贷款利息</text>
           <input class="input" type="digit" value="{{personalInfo.specialDeductions.housingLoan}}" bindinput="onInputChange" data-field="specialDeductions" data-subfield="housingLoan" placeholder="请输入住房贷款利息扣除金额"/>
         </view>
+
+
         <view class="form-item">
           <text class="label">住房租金</text>
           <input class="input" type="digit" value="{{personalInfo.specialDeductions.housingRent}}" bindinput="onInputChange" data-field="specialDeductions" data-subfield="housingRent" placeholder="请输入住房租金扣除金额"/>
         </view>
+
+
         <view class="form-item">
           <text class="label">赡养老人</text>
           <input class="input" type="digit" value="{{personalInfo.specialDeductions.elderlySupport}}" bindinput="onInputChange" data-field="specialDeductions" data-subfield="elderlySupport" placeholder="请输入赡养老人扣除金额"/>
         </view>
+
+
         <view class="form-item">
           <text class="label">婴幼儿照护</text>
           <input class="input" type="digit" value="{{personalInfo.specialDeductions.childcare}}" bindinput="onInputChange" data-field="specialDeductions" data-subfield="childcare" placeholder="请输入婴幼儿照护扣除金额"/>
         </view>
+
+
       </view>
+
+
 
       <view class="form-section">
         <view class="section-title">其他扣除</view>
+
+
         <view class="form-item">
           <view class="label-with-icon">
             <text class="label">其他扣除金额</text>
             <image class="info-icon" src="../../images/icons/info.svg" bindtap="showOtherDeductionsInfo"></image>
           </view>
+
+
           <input class="input" type="digit" value="{{personalInfo.otherDeductions}}" bindinput="onInputChange" data-field="otherDeductions" placeholder="请输入其他扣除金额"/>
         </view>
+
+
         <view class="form-item">
           <view class="label-with-icon">
             <text class="label">其他收入（年度）</text>
             <image class="info-icon" src="../../images/info.png" bindtap="showOtherIncomeInfo"></image>
           </view>
+
+
           <input class="input" type="digit" value="{{personalInfo.otherIncome}}" bindinput="onInputChange" data-field="otherIncome" placeholder="请输入年度其他收入金额"/>
         </view>
+
+
       </view>
+
+
 
       <view class="button-group">
         <button class="btn btn-primary" bind:tap="submitForm">计算税额</button>
         <button class="btn btn-secondary" bind:tap="resetForm">重置</button>
       </view>
 
+      <!-- 免责声明 -->
+      <view class="disclaimer">
+        <text class="disclaimer-text">免责声明：本计算器提供的所有计算结果仅供参考。实际税额以税务部门最终核定为准。由于政策变化、个人具体情况差异等因素，实际税额可能与计算结果存在差异。请您在进行重要财务决策时，建议咨询专业的税务顾问或相关部门。</text>
+      </view>
+
       <!-- 计算结果展示 -->
       <block wx:if="{{isSubmitted}}">
         <view class="result-container">
           <view class="result-title">计算结果</view>
+
+
           <view class="result-item">
             <text class="result-label">应纳税所得额</text>
             <text class="result-value">¥ {{result.personal.taxableIncome}}</text>
           </view>
+
+
           <view class="result-item">
             <text class="result-label">适用税率</text>
             <text class="result-value">{{result.personal.rate}}%</text>
           </view>
+
+
           <view class="result-item">
             <text class="result-label">月度应纳税额</text>
             <text class="result-value">¥ {{result.personal.tax}}</text>
           </view>
+
+
           <view class="result-item">
             <text class="result-label">年度累计应纳税额</text>
             <text class="result-value">¥ {{result.personal.annualTax}}</text>
           </view>
+
+
         </view>
+
+
 
         <!-- 年终奖计算结果 -->
         <block wx:if="{{showBonusResult}}">
           <view class="result-container bonus-result">
             <view class="result-title">年终奖计税方案对比</view>
+
+
             <view class="plan-comparison">
               <view class="plan-item {{result.bonus.optimalPlan === 'separate' ? 'optimal-plan-item' : ''}}">
                 <view class="plan-title">单独计税方案</view>
+
+
                 <view class="plan-detail">
                   <text>年终奖税额: ¥ {{result.bonus.separatePlan.bonusTax}}</text>
                   <text>适用税率: {{result.bonus.separatePlan.bonusTaxRate}}%</text>
                   <text>总税额: ¥ {{result.bonus.separatePlan.tax}}</text>
                 </view>
+
+
                 <view wx:if="{{result.bonus.optimalPlan === 'separate'}}" class="optimal-badge">最优方案</view>
+
+
               </view>
+
+
               <view class="plan-item {{result.bonus.optimalPlan === 'combined' ? 'optimal-plan-item' : ''}}">
                 <view class="plan-title">合并计税方案</view>
+
+
                 <view class="plan-detail">
                   <text>适用税率: {{result.bonus.combinedPlan.taxRate}}%</text>
                   <text>总税额: ¥ {{result.bonus.combinedPlan.tax}}</text>
                 </view>
+
+
                 <view wx:if="{{result.bonus.optimalPlan === 'combined'}}" class="optimal-badge">最优方案</view>
+
+
               </view>
+
+
             </view>
+
+
             <view class="tax-saving">
               <text class="saving-label">节税金额:</text>
               <text class="saving-value">¥ {{result.bonus.taxSaving}}</text>
             </view>
+
+
             <view class="tax-explanation">
               <text class="explanation-text">系统已自动为您计算并推荐最优的年终奖计税方案</text>
             </view>
+
+
           </view>
+
+
         </block>
       </block>
     </view>
+
+
   </block>
 
   <!-- 家庭模式表单 -->
@@ -144,203 +231,334 @@
         <!-- 本人信息 -->
         <view class="form-section family-member-section">
           <view class="section-title">本人信息</view>
+
+
           <view class="form-item">
             <text class="label">月度税前工资</text>
             <input class="input" type="digit" value="{{familyInfo.self.monthlyIncome}}" bindinput="onInputChange" data-spouse="1" data-field="monthlyIncome" placeholder="请输入月度税前工资"/>
           </view>
+
+
           <view class="form-item">
             <text class="label">社保公积金</text>
             <input class="input" type="digit" value="{{familyInfo.self.socialInsurance}}" bindinput="onInputChange" data-spouse="1" data-field="socialInsurance" placeholder="请输入社保公积金金额"/>
           </view>
+
+
           <view class="form-item">
             <text class="label">年终奖</text>
             <input class="input" type="digit" value="{{familyInfo.self.annualBonus}}" bindinput="onInputChange" data-spouse="1" data-field="annualBonus" placeholder="请输入年终奖金额（如有）"/>
           </view>
+
+
           <view class="form-item">
             <view class="label-with-icon">
               <text class="label">其他扣除金额</text>
               <image src="../../images/icons/info.svg" class="info-icon" bindtap="showOtherDeductionsInfo"></image>
             </view>
+
+
             <input class="input" type="digit" value="{{familyInfo.self.otherDeductions}}" bindinput="onInputChange" data-spouse="1" data-field="otherDeductions" placeholder="请输入其他扣除金额"/>
           </view>
+
+
           <view class="form-item">
             <text class="label">继续教育</text>
             <input class="input" type="digit" value="{{familyInfo.self.specialDeductions.continuingEducation}}" bindinput="onInputChange" data-spouse="1" data-field="specialDeductions" data-subfield="continuingEducation" placeholder="请输入继续教育扣除金额"/>
           </view>
+
+
           <view class="form-item">
             <text class="label">赡养老人</text>
             <input class="input" type="digit" value="{{familyInfo.self.specialDeductions.elderlySupport}}" bindinput="onInputChange" data-spouse="1" data-field="specialDeductions" data-subfield="elderlySupport" placeholder="请输入赡养老人扣除金额"/>
           </view>
+
+
           <view class="form-item">
             <text class="label">其他收入（年度）</text>
             <input class="input" type="digit" value="{{familyInfo.self.otherIncome}}" bindinput="onInputChange" data-spouse="1" data-field="otherIncome" placeholder="请输入年度其他收入金额"/>
           </view>
+
+
         </view>
+
+
 
         <!-- 配偶信息 -->
         <view class="form-section family-member-section">
           <view class="section-title">配偶信息</view>
+
+
           <view class="form-item">
             <text class="label">月度税前工资</text>
             <input class="input" type="digit" value="{{familyInfo.spouse.monthlyIncome}}" bindinput="onInputChange" data-spouse="2" data-field="monthlyIncome" placeholder="请输入月度税前工资"/>
           </view>
+
+
           <view class="form-item">
             <text class="label">社保公积金</text>
             <input class="input" type="digit" value="{{familyInfo.spouse.socialInsurance}}" bindinput="onInputChange" data-spouse="2" data-field="socialInsurance" placeholder="请输入社保公积金金额"/>
           </view>
+
+
           <view class="form-item">
             <text class="label">年终奖</text>
             <input class="input" type="digit" value="{{familyInfo.spouse.annualBonus}}" bindinput="onInputChange" data-spouse="2" data-field="annualBonus" placeholder="请输入年终奖金额（如有）"/>
           </view>
+
+
           <view class="form-item">
             <view class="label-with-icon">
               <text class="label">其他扣除金额</text>
               <image src="../../images/icons/info.svg" class="info-icon" bindtap="showOtherDeductionsInfo"></image>
             </view>
+
+
             <input class="input" type="digit" value="{{familyInfo.spouse.otherDeductions}}" bindinput="onInputChange" data-spouse="2" data-field="otherDeductions" placeholder="请输入其他扣除金额"/>
           </view>
+
+
           <view class="form-item">
             <text class="label">继续教育</text>
             <input class="input" type="digit" value="{{familyInfo.spouse.specialDeductions.continuingEducation}}" bindinput="onInputChange" data-spouse="2" data-field="specialDeductions" data-subfield="continuingEducation" placeholder="请输入继续教育扣除金额"/>
           </view>
+
+
           <view class="form-item">
             <text class="label">赡养老人</text>
             <input class="input" type="digit" value="{{familyInfo.spouse.specialDeductions.elderlySupport}}" bindinput="onInputChange" data-spouse="2" data-field="specialDeductions" data-subfield="elderlySupport" placeholder="请输入赡养老人扣除金额"/>
           </view>
+
+
           <view class="form-item">
             <text class="label">其他收入（年度）</text>
             <input class="input" type="digit" value="{{familyInfo.spouse.otherIncome}}" bindinput="onInputChange" data-spouse="2" data-field="otherIncome" placeholder="请输入年度其他收入金额"/>
           </view>
+
+
         </view>
+
+
       </view>
+
+
 
       <!-- 共享扣除项 -->
       <view class="form-section">
         <view class="section-title">共享扣除项</view>
+
+
         <view class="form-item">
           <text class="label">住房贷款利息</text>
           <input class="input" type="digit" value="{{familyInfo.sharedDeductions.housingLoan}}" bindinput="onInputChange" data-shared="true" data-field="housingLoan" placeholder="请输入住房贷款利息扣除金额"/>
         </view>
+
+
         <view class="form-item">
           <text class="label">婴幼儿照护</text>
           <input class="input" type="digit" value="{{familyInfo.sharedDeductions.childcare}}" bindinput="onInputChange" data-shared="true" data-field="childcare" placeholder="请输入婴幼儿照护扣除金额"/>
         </view>
+
+
         <view class="form-item">
           <text class="label">子女教育</text>
           <input class="input" type="digit" value="{{familyInfo.sharedDeductions.childrenEducation}}" bindinput="onInputChange" data-shared="true" data-field="childrenEducation" placeholder="请输入子女教育扣除金额"/>
         </view>
+
+
         <view class="form-item">
           <text class="label">住房租金</text>
           <input class="input" type="digit" value="{{familyInfo.sharedDeductions.housingRent}}" bindinput="onInputChange" data-shared="true" data-field="housingRent" placeholder="请输入住房租金扣除金额"/>
         </view>
+
+
       </view>
+
+
 
       <view class="button-group">
         <button class="btn btn-primary" bind:tap="submitForm">计算税额</button>
         <button class="btn btn-secondary" bind:tap="resetForm">重置</button>
       </view>
 
+      <!-- 免责声明 -->
+      <view class="disclaimer">
+        <text class="disclaimer-text">免责声明：本计算器提供的所有计算结果仅供参考。实际税额以税务部门最终核定为准。由于政策变化、个人具体情况差异等因素，实际税额可能与计算结果存在差异。请您在进行重要财务决策时，建议咨询专业的税务顾问或相关部门。</text>
+      </view>
+
       <!-- 计算结果展示 -->
       <block wx:if="{{isSubmitted}}">
         <view class="result-container">
           <view class="result-title">计算结果</view>
+
+
           <view class="result-item">
             <text class="result-label">本人月度应纳税额</text>
             <text class="result-value">¥ {{result.family.selfTax}}</text>
           </view>
+
+
           <view class="result-item">
             <text class="result-label">配偶月度应纳税额</text>
             <text class="result-value">¥ {{result.family.spouseTax}}</text>
           </view>
+
+
           <view class="result-item">
             <text class="result-label">家庭月度总纳税额</text>
             <text class="result-value">¥ {{result.family.totalTax}}</text>
           </view>
+
+
           <view class="result-item">
             <text class="result-label">家庭年度总纳税额</text>
             <text class="result-value">¥ {{result.family.annualTotalTax}}</text>
           </view>
+
+
           <view class="result-item">
             <text class="result-label">最优分配比例</text>
             <text class="result-value">本人: {{result.family.optimalRatio}}% / 配偶: {{100 - result.family.optimalRatio}}%</text>
           </view>
+
+
           <view class="result-item">
             <text class="result-label">节税金额</text>
             <text class="result-value">¥ {{result.family.taxSaving}}</text>
           </view>
+
+
         </view>
+
+
         
         <!-- 家庭年终奖计算结果 -->
         <block wx:if="{{showBonusResult}}">
           <view class="result-container bonus-result">
             <view class="result-title">年终奖计税方案对比</view>
+
+
             
             <!-- 本人年终奖 -->
             <block wx:if="{{result.family.bonus.selfBonus}}">
               <view class="bonus-section">
                 <view class="bonus-section-title">本人年终奖</view>
+
+
                 <view class="plan-comparison">
                   <view class="plan-item {{result.family.bonus.selfBonus.optimalPlan === 'separate' ? 'optimal-plan-item' : ''}}">
                     <view class="plan-title">单独计税方案</view>
+
+
                     <view class="plan-detail">
                       <text>年终奖税额: ¥ {{result.family.bonus.selfBonus.separatePlan.bonusTax}}</text>
                       <text>适用税率: {{result.family.bonus.selfBonus.separatePlan.bonusTaxRate}}%</text>
                       <text>总税额: ¥ {{result.family.bonus.selfBonus.separatePlan.tax}}</text>
                     </view>
+
+
                     <view wx:if="{{result.family.bonus.selfBonus.optimalPlan === 'separate'}}" class="optimal-badge">最优方案</view>
+
+
                   </view>
+
+
                   <view class="plan-item {{result.family.bonus.selfBonus.optimalPlan === 'combined' ? 'optimal-plan-item' : ''}}">
                     <view class="plan-title">合并计税方案</view>
+
+
                     <view class="plan-detail">
                       <text>适用税率: {{result.family.bonus.selfBonus.combinedPlan.taxRate}}%</text>
                       <text>总税额: ¥ {{result.family.bonus.selfBonus.combinedPlan.tax}}</text>
                     </view>
+
+
                     <view wx:if="{{result.family.bonus.selfBonus.optimalPlan === 'combined'}}" class="optimal-badge">最优方案</view>
+
+
                   </view>
+
+
                 </view>
+
+
                 <view class="tax-saving">
                   <text class="saving-label">节税金额:</text>
                   <text class="saving-value">¥ {{result.family.bonus.selfBonus.taxSaving}}</text>
                 </view>
+
+
               </view>
+
+
             </block>
             
             <!-- 配偶年终奖 -->
             <block wx:if="{{result.family.bonus.spouseBonus}}">
               <view class="bonus-section">
                 <view class="bonus-section-title">配偶年终奖</view>
+
+
                 <view class="plan-comparison">
                   <view class="plan-item {{result.family.bonus.spouseBonus.optimalPlan === 'separate' ? 'optimal-plan-item' : ''}}">
                     <view class="plan-title">单独计税方案</view>
+
+
                     <view class="plan-detail">
                       <text>年终奖税额: ¥ {{result.family.bonus.spouseBonus.separatePlan.bonusTax}}</text>
                       <text>适用税率: {{result.family.bonus.spouseBonus.separatePlan.bonusTaxRate}}%</text>
                       <text>总税额: ¥ {{result.family.bonus.spouseBonus.separatePlan.tax}}</text>
                     </view>
+
+
                     <view wx:if="{{result.family.bonus.spouseBonus.optimalPlan === 'separate'}}" class="optimal-badge">最优方案</view>
+
+
                   </view>
+
+
                   <view class="plan-item {{result.family.bonus.spouseBonus.optimalPlan === 'combined' ? 'optimal-plan-item' : ''}}">
                     <view class="plan-title">合并计税方案</view>
+
+
                     <view class="plan-detail">
                       <text>适用税率: {{result.family.bonus.spouseBonus.combinedPlan.taxRate}}%</text>
                       <text>总税额: ¥ {{result.family.bonus.spouseBonus.combinedPlan.tax}}</text>
                     </view>
+
+
                     <view wx:if="{{result.family.bonus.spouseBonus.optimalPlan === 'combined'}}" class="optimal-badge">最优方案</view>
+
+
                   </view>
+
+
                 </view>
+
+
                 <view class="tax-saving">
                   <text class="saving-label">节税金额:</text>
                   <text class="saving-value">¥ {{result.family.bonus.spouseBonus.taxSaving}}</text>
                 </view>
+
+
               </view>
+
+
             </block>
             
             <view class="tax-explanation">
               <text class="explanation-text">系统已自动为您计算并推荐最优的年终奖计税方案</text>
             </view>
+
+
           </view>
+
+
         </block>
       </block>
     </view>
+
+
   </block>
 </view>
