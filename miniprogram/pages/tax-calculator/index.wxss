@@ -445,11 +445,10 @@
 
 /* 其他扣除项说明样式 */
 .info-section {
-  margin: 20rpx;
-  padding: 20rpx;
+  margin: 40rpx;
   background-color: #f8f8f8;
   border-radius: 8rpx;
-  width: calc(100% - 40rpx);
+  width: calc(100%);
   box-sizing: border-box;
 }
 
