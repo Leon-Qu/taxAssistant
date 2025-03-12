@@ -108,7 +108,8 @@
   width: 100%;
   background-color: #fff;
   border-radius: 6rpx;
-  padding: 12rpx;
+  padding: 8rpx;
+  height: 48rpx;
   box-sizing: border-box;
 }
 

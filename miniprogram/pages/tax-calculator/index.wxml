@@ -102,7 +102,7 @@
 
         <view class="form-item">
           <view class="label-with-icon">
-            <text class="label">其他收入（年度）</text>
+            <text class="label">其他收入 (年度)</text>
             <image class="info-icon" src="../../images/info.png" bindtap="showOtherIncomeInfo"></image>
           </view>
 
@@ -275,7 +275,7 @@
 
 
           <view class="form-item">
-            <text class="label">其他收入（年度）</text>
+            <text class="label">其他收入 (年度)</text>
             <input class="input" type="digit" value="{{familyInfo.self.otherIncome}}" bindinput="onInputChange" data-spouse="1" data-field="otherIncome" placeholder="请输入年度其他收入金额"/>
           </view>
 
@@ -331,7 +331,7 @@
 
 
           <view class="form-item">
-            <text class="label">其他收入（年度）</text>
+            <text class="label">其他收入 (年度)</text>
             <input class="input" type="digit" value="{{familyInfo.spouse.otherIncome}}" bindinput="onInputChange" data-spouse="2" data-field="otherIncome" placeholder="请输入年度其他收入金额"/>
           </view>
 

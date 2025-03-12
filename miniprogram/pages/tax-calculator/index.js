@@ -11,7 +11,7 @@ Page({
       socialInsurance: 0, // 社保公积金
       otherDeductions: 0, // 其他扣除
       annualBonus: 0, // 年终奖
-      otherIncome: 0, // 其他收入（年度）
+      otherIncome: 0, // 其他收入(年度)
       // 专项附加扣除
       specialDeductions: {
         childrenEducation: 0, // 子女教育
@@ -29,7 +29,7 @@ Page({
         socialInsurance: 0,
         otherDeductions: 0,
         annualBonus: 0,
-        otherIncome: 0, // 其他收入（年度）
+        otherIncome: 0, // 其他收入(年度)
         specialDeductions: {
           continuingEducation: 0,
           elderlySupport: 0
@@ -40,7 +40,7 @@ Page({
         socialInsurance: 0,
         otherDeductions: 0,
         annualBonus: 0,
-        otherIncome: 0, // 其他收入（年度）
+        otherIncome: 0, // 其他收入(年度)
         specialDeductions: {
           continuingEducation: 0,
           elderlySupport: 0

@@ -249,7 +249,7 @@ function calculateOptimalFamilyDeduction(spouse1, spouse2, sharedDeductions) {
  * @param {number} specialDeduction - 月度专项附加扣除总额
  * @param {number} otherDeduction - 月度其他扣除总额
  * @param {number} months - 计算月数
- * @param {number} otherIncome - 其他收入（年度）
+ * @param {number} otherIncome - 其他收入(年度)
  * @returns {object} 年度累计税额和适用税率信息
  */
 function calculateAnnualTax(monthlyIncome, socialInsurance, specialDeduction, otherDeduction, months = 12, otherIncome = 0) {
