@@ -442,3 +442,44 @@
   text-align: center;
   line-height: 1.6;
 }
+
+/* 其他扣除项说明样式 */
+.info-section {
+  margin: 20rpx;
+  padding: 20rpx;
+  background-color: #f8f8f8;
+  border-radius: 8rpx;
+  width: calc(100% - 40rpx);
+  box-sizing: border-box;
+}
+
+.info-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.info-content {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* 其他收入说明样式 */
+.income-description {
+  margin: 20rpx;
+  padding: 20rpx;
+  background-color: #f8f8f8;
+  border-radius: 8rpx;
+}
+
+.description-text {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.6;
+  white-space: pre-line;
+}

@@ -86,30 +86,19 @@
 
 
       <view class="form-section">
-        <view class="section-title">其他扣除</view>
+        <view class="section-title">其他年度扣除/收入<image class="info-icon" src="../../images/icons/info.svg" bindtap="showOtherDeductionsInfo"></image></view>
 
 
         <view class="form-item">
-          <view class="label-with-icon">
-            <text class="label">其他扣除金额</text>
-            <image class="info-icon" src="../../images/icons/info.svg" bindtap="showOtherDeductionsInfo"></image>
-          </view>
-
-
+          <text class="label">其他扣除</text>
           <input class="input" type="digit" value="{{personalInfo.otherDeductions}}" bindinput="onInputChange" data-field="otherDeductions" placeholder="请输入其他扣除金额"/>
         </view>
 
 
         <view class="form-item">
-          <view class="label-with-icon">
-            <text class="label">其他收入 (年度)</text>
-            <image class="info-icon" src="../../images/info.png" bindtap="showOtherIncomeInfo"></image>
-          </view>
-
-
+          <text class="label">其他收入</text>
           <input class="input" type="digit" value="{{personalInfo.otherIncome}}" bindinput="onInputChange" data-field="otherIncome" placeholder="请输入年度其他收入金额"/>
         </view>
-
 
       </view>
 
@@ -253,8 +242,7 @@
 
           <view class="form-item">
             <view class="label-with-icon">
-              <text class="label">其他扣除金额</text>
-              <image src="../../images/icons/info.svg" class="info-icon" bindtap="showOtherDeductionsInfo"></image>
+              <text class="label">其他年度扣除</text>
             </view>
 
 
@@ -275,7 +263,7 @@
 
 
           <view class="form-item">
-            <text class="label">其他收入 (年度)</text>
+            <text class="label">其他年度收入</text>
             <input class="input" type="digit" value="{{familyInfo.self.otherIncome}}" bindinput="onInputChange" data-spouse="1" data-field="otherIncome" placeholder="请输入年度其他收入金额"/>
           </view>
 
@@ -309,8 +297,7 @@
 
           <view class="form-item">
             <view class="label-with-icon">
-              <text class="label">其他扣除金额</text>
-              <image src="../../images/icons/info.svg" class="info-icon" bindtap="showOtherDeductionsInfo"></image>
+              <text class="label">其他年度扣除</text>
             </view>
 
 
@@ -331,7 +318,7 @@
 
 
           <view class="form-item">
-            <text class="label">其他收入 (年度)</text>
+            <text class="label">其他年度收入</text>
             <input class="input" type="digit" value="{{familyInfo.spouse.otherIncome}}" bindinput="onInputChange" data-spouse="2" data-field="otherIncome" placeholder="请输入年度其他收入金额"/>
           </view>
 
@@ -560,5 +547,33 @@
     </view>
 
 
+  </block>
+
+  <!-- 家庭模式表单 -->
+  <block wx:if="{{mode === 'family'}}">
+    <!-- 家庭模式的表单内容 -->
+    <!-- ... 保持原有的家庭模式表单内容不变 ... -->
+
+    <!-- 其他扣除项说明 -->
+    <view class="info-section">
+      <text class="info-title">其他扣除项说明</text>
+      <text class="info-content">其他扣除项包括：
+1. 捐赠支出：个人通过公益性社会组织或县级以上人民政府及其部门等国家机关，向教育、扶贫、救灾等公益慈善事业的捐赠支出，可以按照税法规定在计算应纳税所得额时扣除。
+2. 生育津贴：符合国家计划生育政策生育的，可以享受生育津贴，该部分收入可以在计算个人所得税时扣除。
+3. 商业健康保险：购买符合规定的商业健康保险产品的支出，可以按照规定在计算应纳税所得额时扣除。
+4. 税收递延型养老保险：个人购买符合规定的商业养老保险产品的支出，可以按照规定在一定标准内税前扣除。</text>
+    </view>
+
+    <!-- 其他收入说明 -->
+    <view class="info-section">
+      <text class="info-title">其他收入说明</text>
+      <text class="info-content">其他收入包括：
+1. 高温补贴：夏季发放的高温天气津贴
+2. 生育津贴：女职工生育期间获得的津贴
+3. 独生子女费：独生子女父母获得的补贴
+4. 节日补贴：传统节日发放的福利补贴
+5. 加班补贴：法定节假日加班获得的补贴
+6. 特殊岗位津贴：特殊工作环境或岗位的补贴</text>
+    </view>
   </block>
 </view>
