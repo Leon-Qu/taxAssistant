@@ -60,7 +60,7 @@
         <view class="form-item">
           <view class="label-with-icon">
             <text class="label">其他扣除金额</text>
-            <image class="info-icon" src="../../images/info.png" bindtap="showOtherDeductionsInfo"></image>
+            <image class="info-icon" src="../../images/icons/info.svg" bindtap="showOtherDeductionsInfo"></image>
           </view>
           <input class="input" type="digit" value="{{personalInfo.otherDeductions}}" bindinput="onInputChange" data-field="otherDeductions" placeholder="请输入其他扣除金额"/>
         </view>
