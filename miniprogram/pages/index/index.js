@@ -5,7 +5,7 @@ Page({
   },
   
   gotoTaxCalculatorPage() {
-    wx.navigateTo({
+    wx.switchTab({
       url: '/pages/tax-calculator/index',
     })
   },
