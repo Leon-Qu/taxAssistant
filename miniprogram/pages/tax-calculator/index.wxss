@@ -490,6 +490,43 @@
   border-radius: 8rpx;
 }
 
+.allocation-section {
+  margin-top: 20rpx;
+  padding: 20rpx;
+  background-color: #f8f9fa;
+  border-radius: 8rpx;
+}
+
+.allocation-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+  padding-bottom: 10rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.allocation-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12rpx 0;
+}
+
+.allocation-label {
+  font-size: 26rpx;
+  color: #666;
+  flex: 1;
+}
+
+.allocation-value {
+  font-size: 26rpx;
+  color: #07C160;
+  font-weight: 500;
+  min-width: 80rpx;
+  text-align: right;
+}
+
 .process-title {
   font-size: 28rpx;
   font-weight: bold;

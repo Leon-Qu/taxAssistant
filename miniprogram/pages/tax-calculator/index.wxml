@@ -409,43 +409,45 @@
         <view class="result-container">
           <view class="result-title">计算结果</view>
 
-
           <view class="result-item">
             <text class="result-label">本人月度应纳税额</text>
             <text class="result-value">¥ {{result.family.selfTax}}</text>
           </view>
-
 
           <view class="result-item">
             <text class="result-label">配偶月度应纳税额</text>
             <text class="result-value">¥ {{result.family.spouseTax}}</text>
           </view>
 
-
           <view class="result-item">
             <text class="result-label">家庭月度总纳税额</text>
             <text class="result-value">¥ {{result.family.totalTax}}</text>
           </view>
-
 
           <view class="result-item">
             <text class="result-label">家庭年度总纳税额</text>
             <text class="result-value">¥ {{result.family.annualTotalTax}}</text>
           </view>
 
-
-          <view class="result-item">
-            <text class="result-label">最优分配比例</text>
-            <text class="result-value">本人: {{result.family.optimalRatio}}% / 配偶: {{100 - result.family.optimalRatio}}%</text>
+          <view class="allocation-section">
+            <view class="allocation-title">共享扣除项最优分配比例</view>
+            <view class="allocation-item">
+              <text class="allocation-label">住房贷款利息</text>
+              <text class="allocation-value">本人{{result.family.optimalRatio[0] * 100}}%｜配偶{{(1 - result.family.optimalRatio[0]) * 100}}%</text>
+            </view>
+            <view class="allocation-item">
+              <text class="allocation-label">婴幼儿照护</text>
+              <text class="allocation-value">本人{{result.family.optimalRatio[1] * 100}}%｜配偶{{(1 - result.family.optimalRatio[1]) * 100}}%</text>
+            </view>
+            <view class="allocation-item">
+              <text class="allocation-label">子女教育</text>
+              <text class="allocation-value">本人{{result.family.optimalRatio[2] * 100}}%｜配偶{{(1 - result.family.optimalRatio[2]) * 100}}%</text>
+            </view>
+            <view class="allocation-item">
+              <text class="allocation-label">住房租金</text>
+              <text class="allocation-value">本人{{result.family.optimalRatio[3] * 100}}%｜配偶{{(1 - result.family.optimalRatio[3]) * 100}}%</text>
+            </view>
           </view>
-
-
-          <!-- <view class="result-item">
-            <text class="result-label">节税金额</text>
-            <text class="result-value">¥ {{result.family.taxSaving}}</text>
-          </view> -->
-
-
         </view>
 
 

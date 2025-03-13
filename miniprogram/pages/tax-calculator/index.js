@@ -73,7 +73,7 @@ Page({
         spouseTax: 0, // 配偶月度应纳税额
         totalTax: 0, // 家庭月度总纳税额
         annualTotalTax: 0, // 家庭年度总纳税额
-        optimalRatio: 0.5, // 最优分配比例
+        optimalRatio: [], // 最优分配比例
         taxSaving: 0, // 节税金额
         bonus: {
           selfBonus: null, // 本人年终奖计算结果
@@ -307,7 +307,7 @@ Page({
         spouseTax: spouseTax.toFixed(2),
         totalTax: totalTax.toFixed(2),
         annualTotalTax: annualTotalTax.toFixed(2),
-        optimalRatio: (familyResult.optimalRatio * 100).toFixed(0),
+        optimalRatio: familyResult.optimalRatio,
         taxSaving: familyResult.taxSaving.toFixed(2),
         bonus: {
           selfBonus: null,
