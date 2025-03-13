@@ -183,7 +183,7 @@
 
 .disclaimer {
   margin-top: 40rpx;
-  padding: 0 30rpx;
+  padding: 0 20rpx;
 }
 
 .disclaimer-text {
@@ -431,7 +431,6 @@
 
 .disclaimer {
   margin-top: 40rpx;
-  padding: 20rpx;
   background-color: #f9f9f9;
   border-radius: 8rpx;
 }
@@ -439,8 +438,9 @@
 .disclaimer-text {
   font-size: 24rpx;
   color: #999;
-  text-align: center;
+  text-align: left;
   line-height: 1.6;
+  display: block;
 }
 
 /* 其他扣除项说明样式 */

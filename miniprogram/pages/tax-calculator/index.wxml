@@ -110,10 +110,6 @@
       </view>
 
       <!-- 计算结果展示 -->
-      <!-- 免责声明 -->
-      <view class="disclaimer">
-        <text class="disclaimer-text">免责声明：本计算器提供的所有计算结果仅供参考。实际税额以税务部门最终核定为准。由于政策变化、个人具体情况差异等因素，实际税额可能与计算结果存在差异。请您在进行重要财务决策时，建议咨询专业的税务顾问或相关部门。</text>
-      </view>
       <block wx:if="{{isSubmitted}}">
         <view class="result-container">
           <view class="result-title">计算结果</view>
@@ -243,6 +239,10 @@
 
         </block>
       </block>
+      <!-- 免责声明 -->
+      <view class="disclaimer">
+        <text class="disclaimer-text">免责声明：本计算器提供的所有计算结果仅供参考。实际税额以税务部门最终核定为准。由于政策变化、个人具体情况差异等因素，实际税额可能与计算结果存在差异。请您在进行重要财务决策时，建议咨询专业的税务顾问或相关部门。</text>
+      </view>
     </view>
 
 
@@ -405,10 +405,6 @@
       </view>
 
       <!-- 计算结果展示 -->
-      <!-- 免责声明 -->
-      <view class="disclaimer">
-        <text class="disclaimer-text">免责声明：本计算器提供的所有计算结果仅供参考。实际税额以税务部门最终核定为准。由于政策变化、个人具体情况差异等因素，实际税额可能与计算结果存在差异。请您在进行重要财务决策时，建议咨询专业的税务顾问或相关部门。</text>
-      </view>
       <block wx:if="{{isSubmitted}}">
         <view class="result-container">
           <view class="result-title">计算结果</view>
@@ -444,10 +440,10 @@
           </view>
 
 
-          <view class="result-item">
+          <!-- <view class="result-item">
             <text class="result-label">节税金额</text>
             <text class="result-value">¥ {{result.family.taxSaving}}</text>
-          </view>
+          </view> -->
 
 
         </view>
@@ -608,6 +604,11 @@
 3. 节日补贴：传统节日发放的福利补贴
 4. 加班补贴：法定节假日加班获得的补贴
 5. 特殊岗位津贴：特殊工作环境或岗位的补贴</text>
+    </view>
+
+    <!-- 免责声明 -->
+    <view class="info-section">
+      <text class="disclaimer-text">免责声明：本计算器提供的所有计算结果仅供参考。实际税额以税务部门最终核定为准。由于政策变化、个人具体情况差异等因素，实际税额可能与计算结果存在差异。请您在进行重要财务决策时，建议咨询专业的税务顾问或相关部门。</text>
     </view>
   </block>
 </view>

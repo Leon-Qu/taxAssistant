@@ -330,7 +330,8 @@ Page({
     const { spouse1Deduction, spouse2Deduction, taxSaving, originalTax, optimalTax, optimalRatio } = familyResult;
     const { self, spouse, sharedDeductions } = this.data.familyInfo;
     const result = this.data.result.family;
-    
+    // optimalRatio按这个顺序housingLoan, childcare, childrenEducation, housingRent
+
     // 计算本人专项附加扣除总额
     const totalSpecialDeductionSelf = Object.values(self.specialDeductions).reduce((sum, value) => sum + value, 0);
     
@@ -342,9 +343,10 @@ Page({
       const selfInfo = {
         monthlyIncome: self.monthlyIncome,
         socialInsurance: self.socialInsurance,
-        specialDeduction: totalSpecialDeductionSelf + sharedDeductions[0]*optimalRatio[0] + sharedDeductions[1]*optimalRatio[1] +sharedDeductions[2]*optimalRatio[2] +sharedDeductions[3]*optimalRatio[3],
+        specialDeduction: totalSpecialDeductionSelf + sharedDeductions.housingLoan*optimalRatio[0] + sharedDeductions.childcare*optimalRatio[1] +sharedDeductions.childrenEducation*optimalRatio[2] +sharedDeductions.housingRent*optimalRatio[3],
         otherDeduction: self.otherDeductions,
-        annualBonus: self.annualBonus
+        annualBonus: self.annualBonus,
+        otherIncome: self.otherIncome
       };
       
       const selfBonusResult = taxCalculator.calculateOptimalBonusPlan(selfInfo);
@@ -372,9 +374,10 @@ Page({
       const spouseInfo = {
         monthlyIncome: spouse.monthlyIncome,
         socialInsurance: spouse.socialInsurance,
-        specialDeduction: totalSpecialDeductionSpouse + sharedDeductions[0]*(1-optimalRatio[0]) + sharedDeductions[1]*(1-optimalRatio[1]) +sharedDeductions[2]*(1-optimalRatio[2]) +sharedDeductions[3]*(1-optimalRatio[3]),
+        specialDeduction: totalSpecialDeductionSpouse + sharedDeductions.housingLoan*(1-optimalRatio[0]) + sharedDeductions.childcare*(1-optimalRatio[1]) +sharedDeductions.childrenEducation*(1-optimalRatio[2]) +sharedDeductions.housingRent*(1-optimalRatio[3]),
         otherDeduction: spouse.otherDeductions,
-        annualBonus: spouse.annualBonus
+        annualBonus: spouse.annualBonus,
+        otherIncome: spouse.otherIncome
       };
       
       const spouseBonusResult = taxCalculator.calculateOptimalBonusPlan(spouseInfo);

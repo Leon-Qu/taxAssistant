@@ -202,9 +202,9 @@ function calculateOptimalFamilyDeduction(originalSpouse1, originalSpouse2, share
     // 配偶每月共享扣除
     const spouse2Deduction = totalSharedDeduction - spouse1Deduction;
 
-    console.log(`组合: ${combination}`);
-    console.log(`本人每月共享扣除: ${spouse1Deduction}`);
-    console.log(`配偶每月共享扣除: ${spouse2Deduction}`);
+    // console.log(`组合: ${combination}`);
+    // console.log(`本人每月共享扣除: ${spouse1Deduction}`);
+    // console.log(`配偶每月共享扣除: ${spouse2Deduction}`);
 
     // 计算本人年度累计应纳税额（使用累进计税方式）,不考虑年终奖，加上共享部分分配到的
     const originalTaxableIncome1 = calculateAnnualTax(
@@ -239,10 +239,10 @@ function calculateOptimalFamilyDeduction(originalSpouse1, originalSpouse2, share
     //本人最佳方案
     const spouse1OptimalTax = Math.min(spouse1SeparateTaxTotalResult, spouse1CombineTaxTotalResult);
 
-    console.log(`本人年度累计应纳税额（使用累进计税方式）: ${originalTaxableIncome1.tax}`);
-    console.log(`本人年终奖单独计税总税额: ${spouse1SeparateTaxTotalResult}`);
-    console.log(`本人年终奖合并计税总税额: ${spouse1CombineTaxTotalResult}`);
-    console.log(`本人最佳方案: ${spouse1OptimalTax}`);
+    // console.log(`本人年度累计应纳税额（使用累进计税方式）: ${originalTaxableIncome1.tax}`);
+    // console.log(`本人年终奖单独计税总税额: ${spouse1SeparateTaxTotalResult}`);
+    // console.log(`本人年终奖合并计税总税额: ${spouse1CombineTaxTotalResult}`);
+    // console.log(`本人最佳方案: ${spouse1OptimalTax}`);
  
 
     // 计算配偶年度累计应纳税额（使用累进计税方式）,不考虑年终奖，加上共享部分分配到的
@@ -274,19 +274,18 @@ function calculateOptimalFamilyDeduction(originalSpouse1, originalSpouse2, share
     // 配偶最佳方案
     const spouse2OptimalTax = Math.min(spouse2SeparateTaxTotalResult, spouse2CombineTaxTotalResult);
 
-    console.log(`配偶年度累计应纳税额（使用累进计税方式）: ${originalTaxableIncome2.tax}`);
-    console.log(`配偶年终奖单独计税总税额: ${spouse2SeparateTaxTotalResult}`);
-    console.log(`配偶年终奖合并计税总税额: ${spouse2CombineTaxTotalResult}`);
-    console.log(`配偶最佳方案: ${spouse2OptimalTax}`);
+    // console.log(`配偶年度累计应纳税额（使用累进计税方式）: ${originalTaxableIncome2.tax}`);
+    // console.log(`配偶年终奖单独计税总税额: ${spouse2SeparateTaxTotalResult}`);
+    // console.log(`配偶年终奖合并计税总税额: ${spouse2CombineTaxTotalResult}`);
+    // console.log(`配偶最佳方案: ${spouse2OptimalTax}`);
 
     // 当前分配方案
     const originalTotalTax = spouse1OptimalTax + spouse2OptimalTax;
-    console.log(`当前分配方案总税额：${originalTotalTax}`);
+    // console.log(`当前分配方案总税额：${originalTotalTax}`);
     
     if (originalTotalTax < optimalTotalTaxResult) {
       optimalTotalTaxResult = originalTotalTax;
       bestCombination = combination;
-      console.log(`当前分配方案最组合：${bestCombination}，总税额：${optimalTotalTaxResult}`);
     }
   }
 
