@@ -159,15 +159,15 @@ Page({
     // 计算专项附加扣除总额
     const totalSpecialDeduction = Object.values(specialDeductions).reduce((sum, value) => sum + value, 0);
     
-    // 计算应纳税所得额
+    // 计算月度应纳税所得额（不包含其他扣除,所以otherDeductions传0）
     const taxableIncome = taxCalculator.calculateTaxableIncome(
       monthlyIncome,
       socialInsurance,
       totalSpecialDeduction,
-      otherDeductions
+      0
     );
     
-    // 计算应纳税额
+    // 计算月度应纳税额
     const taxResult = taxCalculator.calculateTax(taxableIncome);
     
     // 计算年度累计应纳税额（使用累进计税方式）
@@ -182,6 +182,7 @@ Page({
     
     // 更新结果
     this.setData({
+      totalSpecialDeduction: totalSpecialDeduction.toFixed(2), // 添加：用于显示专项附加扣除总额
       'result.personal': {
         taxableIncome: taxableIncome.toFixed(2),
         tax: taxResult.tax.toFixed(2),
@@ -214,7 +215,8 @@ Page({
       socialInsurance: personalInfo.socialInsurance,
       specialDeduction: totalSpecialDeduction,
       otherDeduction: personalInfo.otherDeductions,
-      annualBonus: personalInfo.annualBonus
+      annualBonus: personalInfo.annualBonus,
+      otherIncome: personalInfo.otherIncome
     };
     
     // 计算最优方案
@@ -256,7 +258,8 @@ Page({
       socialInsurance: self.socialInsurance,
       specialDeduction: totalSpecialDeductionSelf,
       otherDeduction: self.otherDeductions,
-      otherIncome: self.otherIncome
+      otherIncome: self.otherIncome,
+      annualBonus: self.annualBonus
     };
     
     const spouseInfo = {
@@ -264,35 +267,38 @@ Page({
       socialInsurance: spouse.socialInsurance,
       specialDeduction: totalSpecialDeductionSpouse,
       otherDeduction: spouse.otherDeductions,
-      otherIncome: spouse.otherIncome
+      otherIncome: spouse.otherIncome,
+      annualBonus: spouse.annualBonus
     };
     
     // 计算最优分配方案
+    // 最优分配应该按年度计算
     const familyResult = taxCalculator.calculateOptimalFamilyDeduction(
       selfInfo,
       spouseInfo,
       sharedDeductions
     );
     
-    // 计算各自应纳税额
+    // 计算各自应纳税额,月度纳税额不考虑其他
     const selfTaxableIncome = taxCalculator.calculateTaxableIncome(
       self.monthlyIncome,
       self.socialInsurance,
       totalSpecialDeductionSelf + familyResult.spouse1Deduction,
-      self.otherDeductions
+      0
     );
     
     const spouseTaxableIncome = taxCalculator.calculateTaxableIncome(
       spouse.monthlyIncome,
       spouse.socialInsurance,
       totalSpecialDeductionSpouse + familyResult.spouse2Deduction,
-      spouse.otherDeductions
+      0
     );
     
     const selfTax = taxCalculator.calculateTax(selfTaxableIncome).tax;
     const spouseTax = taxCalculator.calculateTax(spouseTaxableIncome).tax;
     const totalTax = selfTax + spouseTax;
-    const annualTotalTax = totalTax * 12;
+    // 年度税额
+    const annualTotalTax = familyResult.optimalTax;
     
     // 更新结果
     this.setData({
@@ -313,15 +319,16 @@ Page({
     
     // 如果有年终奖，计算最优方案
     if (self.annualBonus > 0 || spouse.annualBonus > 0) {
-      this.calculateFamilyBonusTax();
+      this.calculateFamilyBonusTax(familyResult);
     }
   },
   
   /**
    * 计算家庭年终奖最优方案
    */
-  calculateFamilyBonusTax: function() {
-    const { self, spouse } = this.data.familyInfo;
+  calculateFamilyBonusTax: function(familyResult) {
+    const { spouse1Deduction, spouse2Deduction, taxSaving, originalTax, optimalTax, optimalRatio } = familyResult;
+    const { self, spouse, sharedDeductions } = this.data.familyInfo;
     const result = this.data.result.family;
     
     // 计算本人专项附加扣除总额
@@ -335,7 +342,7 @@ Page({
       const selfInfo = {
         monthlyIncome: self.monthlyIncome,
         socialInsurance: self.socialInsurance,
-        specialDeduction: totalSpecialDeductionSelf,
+        specialDeduction: totalSpecialDeductionSelf + sharedDeductions[0]*optimalRatio[0] + sharedDeductions[1]*optimalRatio[1] +sharedDeductions[2]*optimalRatio[2] +sharedDeductions[3]*optimalRatio[3],
         otherDeduction: self.otherDeductions,
         annualBonus: self.annualBonus
       };
@@ -365,7 +372,7 @@ Page({
       const spouseInfo = {
         monthlyIncome: spouse.monthlyIncome,
         socialInsurance: spouse.socialInsurance,
-        specialDeduction: totalSpecialDeductionSpouse,
+        specialDeduction: totalSpecialDeductionSpouse + sharedDeductions[0]*(1-optimalRatio[0]) + sharedDeductions[1]*(1-optimalRatio[1]) +sharedDeductions[2]*(1-optimalRatio[2]) +sharedDeductions[3]*(1-optimalRatio[3]),
         otherDeduction: spouse.otherDeductions,
         annualBonus: spouse.annualBonus
       };

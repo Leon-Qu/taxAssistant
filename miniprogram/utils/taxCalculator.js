@@ -16,6 +16,16 @@ const TAX_RATE_TABLE = [
   { min: 960000, max: Infinity, rate: 0.45, quickDeduction: 181920 }
 ];
 
+const BONUS_TAX_RATE_TABLE = [
+  { min: 0, max: 3000, rate: 0.03, quickDeduction: 0 },
+  { min: 3000, max: 12000, rate: 0.1, quickDeduction: 210 },
+  { min: 12000, max: 25000, rate: 0.2, quickDeduction: 1410 },
+  { min: 25000, max: 35000, rate: 0.25, quickDeduction: 2660 },
+  { min: 35000, max: 55000, rate: 0.3, quickDeduction: 4410 },
+  { min: 55000, max: 80000, rate: 0.35, quickDeduction: 7160 },
+  { min: 80000, max: Infinity, rate: 0.45, quickDeduction: 15160 }
+];
+
 /**
  * 计算应纳税所得额
  * @param {number} income - 税前收入
@@ -26,6 +36,10 @@ const TAX_RATE_TABLE = [
  */
 function calculateTaxableIncome(income, socialInsurance, specialDeduction, otherDeduction) {
   return Math.max(0, income - socialInsurance - TAX_THRESHOLD - specialDeduction - otherDeduction);
+}
+
+function calculateTaxableIncomeAnnual(income, socialInsurance, specialDeduction, otherDeduction) {
+  return Math.max(0, income - socialInsurance - TAX_THRESHOLD * 12 - specialDeduction - otherDeduction);
 }
 
 /**
@@ -42,7 +56,7 @@ function calculateTax(taxableIncome) {
   }
   
   // 计算税额 = 应纳税所得额 * 税率 - 速算扣除数
-  const tax = taxableIncome * taxLevel.rate - taxLevel.quickDeduction;
+  const tax = (taxableIncome * taxLevel.rate - taxLevel.quickDeduction).toFixed(2);
   
   return {
     tax: Math.max(0, tax),
@@ -61,14 +75,14 @@ function calculateBonusTax(bonus) {
   const monthlyBonus = bonus / 12;
   
   // 查找适用的税率档位
-  const taxLevel = TAX_RATE_TABLE.find(level => monthlyBonus > level.min && monthlyBonus <= level.max);
+  const taxLevel = BONUS_TAX_RATE_TABLE.find(level => monthlyBonus > level.min && monthlyBonus <= level.max);
   
   if (!taxLevel) {
     return { tax: 0, rate: 0, level: null };
   }
   
   // 计算税额 = 年终奖金额 * 适用税率 - 速算扣除数
-  const tax = bonus * taxLevel.rate - taxLevel.quickDeduction;
+  const tax = (bonus * taxLevel.rate - taxLevel.quickDeduction).toFixed(2);
   
   return {
     tax: Math.max(0, tax),
@@ -89,34 +103,34 @@ function calculateBonusTax(bonus) {
  * @returns {object} 最优方案信息
  */
 function calculateOptimalBonusPlan(personalInfo, months = 12) {
-  const { monthlyIncome, socialInsurance, specialDeduction, otherDeduction, annualBonus } = personalInfo;
+  const { monthlyIncome, socialInsurance, specialDeduction, otherDeduction, annualBonus, otherIncome } = personalInfo;
   
   // 方案1: 年终奖单独计税
   const separateTaxResult = calculateBonusTax(annualBonus);
   
   // 计算常规月度工资的年度累计税额
   let annualRegularTax = 0;
-  for (let i = 1; i <= months; i++) {
-    const monthTaxableIncome = calculateTaxableIncome(
-      monthlyIncome * i,
-      socialInsurance * i,
-      specialDeduction * i,
-      otherDeduction * i
-    );
-    const monthTaxResult = calculateTax(monthTaxableIncome);
-    annualRegularTax = monthTaxResult.tax;
-  }
+  let annualTaxableIncome = calculateTaxableIncomeAnnual(
+    monthlyIncome * months,
+    socialInsurance * months,
+    specialDeduction * months,
+    otherDeduction
+  );
+  // 再加上年度其他收入减去年度其他扣除
+  annualTaxableIncome = annualTaxableIncome + otherIncome;
+  const annualTaxResult = calculateTax(annualTaxableIncome);
+  annualRegularTax = annualTaxResult.tax;
   
   // 方案1总税额 = 年度常规工资税额 + 年终奖单独计税税额
   const separateTotalTax = annualRegularTax + separateTaxResult.tax;
   
   // 方案2: 年终奖与工资合并计税
-  const combinedAnnualIncome = monthlyIncome * months + annualBonus;
-  const combinedTaxableIncome = calculateTaxableIncome(
+  const combinedAnnualIncome = monthlyIncome * months + annualBonus + otherIncome;
+  const combinedTaxableIncome = calculateTaxableIncomeAnnual(
     combinedAnnualIncome,
     socialInsurance * months,
     specialDeduction * months,
-    otherDeduction * months
+    otherDeduction
   );
   const combinedTaxResult = calculateTax(combinedTaxableIncome);
   
@@ -148,10 +162,10 @@ function calculateOptimalBonusPlan(personalInfo, months = 12) {
  * @param {object} sharedDeductions - 共享扣除项
  * @returns {object} 最优分配方案
  */
-function calculateOptimalFamilyDeduction(spouse1, spouse2, sharedDeductions) {
+function calculateOptimalFamilyDeduction(originalSpouse1, originalSpouse2, sharedDeductions) {
   const { housingLoan, childcare, childrenEducation, housingRent } = sharedDeductions;
   const totalSharedDeduction = housingLoan + childcare + childrenEducation + housingRent;
-  
+
   // 如果没有共享扣除项，直接返回原方案
   if (totalSharedDeduction === 0) {
     return {
@@ -162,83 +176,131 @@ function calculateOptimalFamilyDeduction(spouse1, spouse2, sharedDeductions) {
       optimalTax: 0
     };
   }
-  
-  // 计算原始税额（假设平均分配）
-  const originalSpouse1 = {
-    ...spouse1,
-    specialDeduction: spouse1.specialDeduction + totalSharedDeduction / 2
+
+
+  // 生成所有组合
+  // 定义每个变量的可能取值
+  const values = [0, 0.5, 1];
+  const variableCount = 4;
+
+  // 使用函数式方法生成所有组合
+  const generateCombinations = () => {
+    return Array(variableCount).fill(values).reduce((acc, currentValues) => {
+      return acc.flatMap(combination => 
+        currentValues.map(value => [...combination, value])
+      );
+    }, [[]]);
   };
-  
-  const originalSpouse2 = {
-    ...spouse2,
-    specialDeduction: spouse2.specialDeduction + totalSharedDeduction / 2
-  };
-  
-  const originalTaxableIncome1 = calculateTaxableIncome(
-    originalSpouse1.monthlyIncome,
-    originalSpouse1.socialInsurance,
-    originalSpouse1.specialDeduction,
-    originalSpouse1.otherDeduction
-  );
-  
-  const originalTaxableIncome2 = calculateTaxableIncome(
-    originalSpouse2.monthlyIncome,
-    originalSpouse2.socialInsurance,
-    originalSpouse2.specialDeduction,
-    originalSpouse2.otherDeduction
-  );
-  
-  const originalTax1 = calculateTax(originalTaxableIncome1).tax;
-  const originalTax2 = calculateTax(originalTaxableIncome2).tax;
-  const originalTotalTax = originalTax1 + originalTax2;
-  
-  // 尝试不同的分配比例，找出最优方案
-  let optimalRatio = 0.5; // 默认平均分配
-  let optimalTotalTax = originalTotalTax;
-  
-  // 以10%为步长尝试不同分配比例
-  for (let ratio = 0; ratio <= 1; ratio += 0.1) {
-    const testSpouse1 = {
-      ...spouse1,
-      specialDeduction: spouse1.specialDeduction + totalSharedDeduction * ratio
-    };
-    
-    const testSpouse2 = {
-      ...spouse2,
-      specialDeduction: spouse2.specialDeduction + totalSharedDeduction * (1 - ratio)
-    };
-    
-    const testTaxableIncome1 = calculateTaxableIncome(
-      testSpouse1.monthlyIncome,
-      testSpouse1.socialInsurance,
-      testSpouse1.specialDeduction,
-      testSpouse1.otherDeduction
+  const allCombinations = generateCombinations();
+
+  let optimalTotalTaxResult = Number.MAX_SAFE_INTEGER;
+  // 计算每个组合的总扣除额并得到最优解
+  let bestCombination = [0,0,0,0];
+  for (const combination of allCombinations) {
+    // 本人每月共享扣除
+    const spouse1Deduction = combination[0] * housingLoan + combination[1] * childcare + combination[2] * childrenEducation + combination[3] * housingRent;
+    // 配偶每月共享扣除
+    const spouse2Deduction = totalSharedDeduction - spouse1Deduction;
+
+    console.log(`组合: ${combination}`);
+    console.log(`本人每月共享扣除: ${spouse1Deduction}`);
+    console.log(`配偶每月共享扣除: ${spouse2Deduction}`);
+
+    // 计算本人年度累计应纳税额（使用累进计税方式）,不考虑年终奖，加上共享部分分配到的
+    const originalTaxableIncome1 = calculateAnnualTax(
+      originalSpouse1.monthlyIncome,
+      originalSpouse1.socialInsurance,
+      originalSpouse1.specialDeduction + spouse1Deduction,
+      originalSpouse1.otherDeduction,
+      12,
+      originalSpouse1.otherIncome
     );
     
-    const testTaxableIncome2 = calculateTaxableIncome(
-      testSpouse2.monthlyIncome,
-      testSpouse2.socialInsurance,
-      testSpouse2.specialDeduction,
-      testSpouse2.otherDeduction
+    // 计算配偶年度累计应纳税额（使用累进计税方式）,不考虑年终奖，加上共享部分分配到的
+
+    // 计算本人年终奖单独计税税额
+    const spouse1SeparateTaxResult = calculateBonusTax(originalSpouse1.annualBonus);
+    // 计算本人年度纳税，不含年终奖
+    const spouse1OriginalTax1 = originalTaxableIncome1.tax;
+    // 本人年终奖单独计税总税额
+    const spouse1SeparateTaxTotalResult = spouse1OriginalTax1 + spouse1SeparateTaxResult.tax;
+
+    // 方案2: 年终奖与工资合并计税
+    // 本人年终奖合并计税总税额
+    const spouse1CombinedAnnualIncome = originalSpouse1.monthlyIncome * 12 + originalSpouse1.annualBonus + originalSpouse1.otherIncome;
+    const spouse1CombinedTaxableIncome = calculateTaxableIncomeAnnual(
+      spouse1CombinedAnnualIncome,
+      originalSpouse1.socialInsurance * 12,
+      (originalSpouse1.specialDeduction + spouse1Deduction) * 12,
+      originalSpouse1.otherDeduction
     );
+    const spouse1CombineTaxTotalResult = calculateTax(spouse1CombinedTaxableIncome).tax;
     
-    const testTax1 = calculateTax(testTaxableIncome1).tax;
-    const testTax2 = calculateTax(testTaxableIncome2).tax;
-    const testTotalTax = testTax1 + testTax2;
+    //本人最佳方案
+    const spouse1OptimalTax = Math.min(spouse1SeparateTaxTotalResult, spouse1CombineTaxTotalResult);
+
+    console.log(`本人年度累计应纳税额（使用累进计税方式）: ${originalTaxableIncome1.tax}`);
+    console.log(`本人年终奖单独计税总税额: ${spouse1SeparateTaxTotalResult}`);
+    console.log(`本人年终奖合并计税总税额: ${spouse1CombineTaxTotalResult}`);
+    console.log(`本人最佳方案: ${spouse1OptimalTax}`);
+ 
+
+    // 计算配偶年度累计应纳税额（使用累进计税方式）,不考虑年终奖，加上共享部分分配到的
+    const originalTaxableIncome2 = calculateAnnualTax(
+      originalSpouse2.monthlyIncome,
+      originalSpouse2.socialInsurance,
+      originalSpouse2.specialDeduction + spouse2Deduction,
+      originalSpouse2.otherDeduction,
+      12,
+      originalSpouse2.otherIncome
+    );
+
+    // 配偶年终奖单独计税
+    const spouse2SeparateTaxResult = calculateBonusTax(originalSpouse2.annualBonus);
+    // 计算配偶年度纳税，不含年终奖
+    const spouse2OriginalTax1 = originalTaxableIncome2.tax;
+    // 配偶年终奖单独计税总税额
+    const spouse2SeparateTaxTotalResult = spouse2OriginalTax1 + spouse2SeparateTaxResult.tax;
+    // 方案2: 年终奖与工资合并计税
+    // 配偶年终奖合并计税总税额
+    const spouse2CombinedAnnualIncome = originalSpouse2.monthlyIncome * 12 + originalSpouse2.annualBonus + originalSpouse2.otherIncome;
+    const spouse2CombinedTaxableIncome = calculateTaxableIncomeAnnual(
+      spouse2CombinedAnnualIncome,
+      originalSpouse2.socialInsurance * 12,
+      (originalSpouse2.specialDeduction + spouse2Deduction) * 12,
+      originalSpouse2.otherDeduction
+    );
+    const spouse2CombineTaxTotalResult = calculateTax(spouse2CombinedTaxableIncome).tax;
+    // 配偶最佳方案
+    const spouse2OptimalTax = Math.min(spouse2SeparateTaxTotalResult, spouse2CombineTaxTotalResult);
+
+    console.log(`配偶年度累计应纳税额（使用累进计税方式）: ${originalTaxableIncome2.tax}`);
+    console.log(`配偶年终奖单独计税总税额: ${spouse2SeparateTaxTotalResult}`);
+    console.log(`配偶年终奖合并计税总税额: ${spouse2CombineTaxTotalResult}`);
+    console.log(`配偶最佳方案: ${spouse2OptimalTax}`);
+
+    // 当前分配方案
+    const originalTotalTax = spouse1OptimalTax + spouse2OptimalTax;
+    console.log(`当前分配方案总税额：${originalTotalTax}`);
     
-    if (testTotalTax < optimalTotalTax) {
-      optimalRatio = ratio;
-      optimalTotalTax = testTotalTax;
+    if (originalTotalTax < optimalTotalTaxResult) {
+      optimalTotalTaxResult = originalTotalTax;
+      bestCombination = combination;
+      console.log(`当前分配方案最组合：${bestCombination}，总税额：${optimalTotalTaxResult}`);
     }
   }
+
+  console.log(`分配方案最组合：${bestCombination}，总税额：${optimalTotalTaxResult}`);
+  const spouse1Deduction = housingLoan * bestCombination[0] + childcare * bestCombination[1] + childrenEducation * bestCombination[2] + housingRent * bestCombination[3];
+  const spouse2Deduction = totalSharedDeduction - spouse1Deduction;
   
   return {
-    spouse1Deduction: totalSharedDeduction * optimalRatio,
-    spouse2Deduction: totalSharedDeduction * (1 - optimalRatio),
-    taxSaving: originalTotalTax - optimalTotalTax,
-    originalTax: originalTotalTax,
-    optimalTax: optimalTotalTax,
-    optimalRatio: optimalRatio
+    spouse1Deduction: spouse1Deduction,
+    spouse2Deduction: spouse2Deduction,
+    taxSaving: 0,
+    originalTax: 0,
+    optimalTax: optimalTotalTaxResult,
+    optimalRatio: bestCombination
   };
 }
 
@@ -257,10 +319,10 @@ function calculateAnnualTax(monthlyIncome, socialInsurance, specialDeduction, ot
   const annualIncome = monthlyIncome * months;
   const annualSocialInsurance = socialInsurance * months;
   const annualSpecialDeduction = specialDeduction * months;
-  const annualOtherDeduction = otherDeduction * months;
+  const annualOtherDeduction = otherDeduction;
   
   // 计算年度累计应纳税所得额
-  const annualTaxableIncome = calculateTaxableIncome(
+  const annualTaxableIncome = calculateTaxableIncomeAnnual(
     annualIncome + otherIncome,
     annualSocialInsurance,
     annualSpecialDeduction,
@@ -273,11 +335,13 @@ function calculateAnnualTax(monthlyIncome, socialInsurance, specialDeduction, ot
 
 module.exports = {
   calculateTaxableIncome,
+  calculateTaxableIncomeAnnual,
   calculateTax,
   calculateBonusTax,
   calculateOptimalBonusPlan,
   calculateOptimalFamilyDeduction,
   calculateAnnualTax,
   TAX_THRESHOLD,
-  TAX_RATE_TABLE
+  TAX_RATE_TABLE,
+  BONUS_TAX_RATE_TABLE
 };

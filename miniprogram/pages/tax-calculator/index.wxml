@@ -118,30 +118,67 @@
         <view class="result-container">
           <view class="result-title">计算结果</view>
 
-
-          <view class="result-item">
-            <text class="result-label">应纳税所得额</text>
-            <text class="result-value">¥ {{result.personal.taxableIncome}}</text>
+          <view class="calculation-process">
+            <view class="process-title">专项附加扣除明细</view>
+            <view class="process-item">子女教育：¥ {{personalInfo.specialDeductions.childrenEducation}}</view>
+            <view class="process-item">继续教育：¥ {{personalInfo.specialDeductions.continuingEducation}}</view>
+            <view class="process-item">住房贷款利息：¥ {{personalInfo.specialDeductions.housingLoan}}</view>
+            <view class="process-item">住房租金：¥ {{personalInfo.specialDeductions.housingRent}}</view>
+            <view class="process-item">赡养老人：¥ {{personalInfo.specialDeductions.elderlySupport}}</view>
+            <view class="process-item">婴幼儿照护：¥ {{personalInfo.specialDeductions.childcare}}</view>
+            <view class="process-item highlight">月度合计：¥ {{totalSpecialDeduction}}</view>
+            <view class="process-item highlight">年度合计：¥ {{totalSpecialDeduction * 12}}</view>
           </view>
 
-
-          <view class="result-item">
-            <text class="result-label">适用税率</text>
-            <text class="result-value">{{result.personal.rate}}%</text>
+          <view class="calculation-process">
+            <view class="process-title">月度计算过程</view>
+            <view class="process-item">
+              <text>月度工资收入：¥ {{personalInfo.monthlyIncome}}</text>
+            </view>
+            <view class="process-item">
+              <text>减：社保公积金：¥ {{personalInfo.socialInsurance}}</text>
+            </view>
+            <view class="process-item">
+              <text>减：专项附加扣除：¥ {{totalSpecialDeduction}}</text>
+            </view>
+            <view class="process-item">
+              <text>减：基本减除费用：¥ 5000</text>
+            </view>
+            <view class="process-item highlight">
+              <text>月度应纳税所得额：¥ {{result.personal.taxableIncome}}</text>
+            </view>
+            <view class="process-item">
+              <text>适用税率：{{result.personal.rate}}%</text>
+            </view>
+            <view class="process-item highlight">
+              <text>月度应纳税额：¥ {{result.personal.tax}}</text>
+            </view>
           </view>
 
-
-          <view class="result-item">
-            <text class="result-label">月度应纳税额</text>
-            <text class="result-value">¥ {{result.personal.tax}}</text>
+          <view class="calculation-process">
+            <view class="process-title">年度累计计算过程</view>
+            <view class="process-item">
+              <text>年度工资收入：¥ {{personalInfo.monthlyIncome * 12}}</text>
+            </view>
+            <view class="process-item" wx:if="{{personalInfo.otherIncome > 0}}">
+              <text>加：其他收入：¥ {{personalInfo.otherIncome}}</text>
+            </view>
+            <view class="process-item">
+              <text>减：社保公积金：¥ {{personalInfo.socialInsurance * 12}}</text>
+            </view>
+            <view class="process-item">
+              <text>减：专项附加扣除：¥ {{totalSpecialDeduction * 12}}</text>
+            </view>
+            <view class="process-item">
+              <text>减：基本减除费用：¥ {{5000 * 12}}</text>
+            </view>
+            <view class="process-item" wx:if="{{personalInfo.otherDeductions > 0}}">
+              <text>减：其他扣除：¥ {{personalInfo.otherDeductions}}</text>
+            </view>
+            <view class="process-item highlight">
+              <text>年度累计应纳税额：¥ {{result.personal.annualTax}}</text>
+            </view>
           </view>
-
-
-          <view class="result-item">
-            <text class="result-label">年度累计应纳税额</text>
-            <text class="result-value">¥ {{result.personal.annualTax}}</text>
-          </view>
-
 
         </view>
 
