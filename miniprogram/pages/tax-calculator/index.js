@@ -193,7 +193,7 @@ Page({
     });
     
     // 如果有年终奖，计算最优方案
-    if (annualBonus > 0) {
+    if (annualBonus >= 0) {
       this.calculateBonusTax();
     } else {
       this.setData({
@@ -339,7 +339,7 @@ Page({
     const totalSpecialDeductionSpouse = Object.values(spouse.specialDeductions).reduce((sum, value) => sum + value, 0);
     
     // 计算本人年终奖
-    if (self.annualBonus > 0) {
+    if (self.annualBonus >= 0) {
       const selfInfo = {
         monthlyIncome: self.monthlyIncome,
         socialInsurance: self.socialInsurance,
@@ -370,7 +370,7 @@ Page({
     }
     
     // 计算配偶年终奖
-    if (spouse.annualBonus > 0) {
+    if (spouse.annualBonus >= 0) {
       const spouseInfo = {
         monthlyIncome: spouse.monthlyIncome,
         socialInsurance: spouse.socialInsurance,
